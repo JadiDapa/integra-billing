@@ -1,0 +1,112 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  fullname String?
+  role     String
+}
+
+model Region {
+  id     String     @id @default(cuid())
+  name   String
+  code   String
+  status ActiveType @default(ACTIVE)
+
+  customers Int @default(0)
+  revenue   Int @default(0)
+  workers   Int @default(0)
+
+  province String
+  city     String
+  district String
+  village  String
+  phone    String
+
+  internetPackage InternetPackage[]
+
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  nas       NAS[]
+  mikrotiks Mikrotik[]
+}
+
+enum ActiveType {
+  ACTIVE
+  INACTIVE
+}
+
+model InternetPackage {
+  id            String              @id @default(cuid())
+  name          String
+  speedType     InternetPackageType @default(FIX)
+  downloadSpeed String
+  uploadSpeed   String
+  activeperiod  ActivePeriodeType   @default(FIX)
+  period        String?
+  providerPrice String
+  resellerPrice String
+  regionId      String
+  region        Region              @relation(fields: [regionId], references: [id])
+  status        ActiveType
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+}
+
+enum InternetPackageType {
+  FIX
+  BURST
+  STATIC
+}
+
+enum ActivePeriodeType {
+  FIX
+  ACTIVE_TIME
+}
+
+model NAS {
+  id             String         @id @default(cuid())
+  name           String
+  description    String?
+  connectionType ConnectionType @default(VPN)
+  publicIP       String?
+  regionId       String
+  region         Region         @relation(fields: [regionId], references: [id])
+  status         ActiveType
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  mikrotiks      Mikrotik[]
+}
+
+model Mikrotik {
+  id             String         @id @default(cuid())
+  deviceName     String
+  nasId          String
+  nas            NAS            @relation(fields: [nasId], references: [id])
+  connectionType ConnectionType @default(VPN)
+  ipAddress      String?
+  portAPI        Int            @default(8728)
+  username       String
+  password       String
+  description    String
+  regionId       String
+  region         Region         @relation(fields: [regionId], references: [id])
+  status         ActiveType
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+enum ConnectionType {
+  VPN
+  IP_PUBLIK
+}
