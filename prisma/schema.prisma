@@ -110,3 +110,12 @@ enum ConnectionType {
   VPN
   IP_PUBLIK
 }
+
+
+model Customer {
+
+}
+
+model Billing {
+
+}

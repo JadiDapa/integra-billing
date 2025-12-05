@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
-import { Nunito } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import Providers from "@/providers/Providers";
 
-const nunito = Nunito({
+const poppins = Poppins({
   subsets: ["latin"],
   weight: ["200", "300", "400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
-  title: "Integra Billing",
-  description: "Sistem Manajemen Billing Internet Provider PT Integra",
+  title: "ISys Research Group",
+  description: "ISys Research Group - Universitas Sriwijaya",
 };
 
 export default function RootLayout({
@@ -24,7 +24,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className={`${nunito.className}`}>
+      <body className={`${poppins.className}`}>
         <Toaster richColors position="top-right" theme="light" />
         <Providers>
           <main>{children}</main>
